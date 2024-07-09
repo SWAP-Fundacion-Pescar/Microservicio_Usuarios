@@ -1,8 +1,12 @@
 import express from 'express';
 import MongoDB from './Infrastructure/Persistence/Config/MongoDB';
 import userRouter from './Application/Routes/UserRoutes';
+import requestLogger from './Application/Middleware/RequestLogger';
+import errorHandler from './Application/Middleware/ErrorHandler';
 MongoDB();
 const app = express();
 app.use(express.json());
+app.use(requestLogger);
 app.use('/api', userRouter);
+app.use(errorHandler);
 export default app;
