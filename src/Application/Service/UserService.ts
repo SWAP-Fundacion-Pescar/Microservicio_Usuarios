@@ -1,33 +1,61 @@
 import UserCommand from "../../Infrastructure/Command/UserCommand";
+import UserQuery from "../../Infrastructure/Query/UserQuery";
 import CreateUserDTO from "../DTO/CreateUserDTO";
+import UpdatePasswordDTO from "../DTO/UpdatePasswordDTO";
 import UpdateUserDTO from "../DTO/UpdateUserDTO";
+import ValidationException from "../Exceptions/ValidationException";
 import IUser from "../Interfaces/User/IUser";
 import IUserService from "../Interfaces/User/IUserService";
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = 'your_very_secure_and_long_random_string';
 
 const userCommand = new UserCommand();
+const userQuery = new UserQuery();
 class UserService implements IUserService
 {
-    getUserById(id: string): Promise<IUser> {
-        throw new Error("Method not implemented.");
+    async getUserById(id: string): Promise<IUser> {
+        const retrievedUser = await userQuery.getUserById(id);
+        return retrievedUser;
     }
-    getUsersByRole(role: string): Promise<IUser[]> {
-        throw new Error("Method not implemented.");
+    async getUsersByRole(role: string): Promise<IUser[]> {
+        const retrievedUser = await userQuery.getUsersByRole(role);
+        return retrievedUser;
     }
-    getUsersByCity(city: string): Promise<IUser[]> {
-        throw new Error("Method not implemented.");
+    async getUsersByCity(city: string): Promise<IUser[]> {
+        const retrievedUser = await userQuery.getUsersByCity(city);
+        return retrievedUser;
     }
-    getUsersByPuntuation(puntuation: number): Promise<IUser[]> {
-        throw new Error("Method not implemented.");
+    async getUsersByPuntuation(puntuation: number): Promise<IUser[]> {
+        const retrievedUser = await userQuery.getUsersByPuntuation(puntuation);
+        return retrievedUser;
     }
-    registerUser(userDto: CreateUserDTO): Promise<IUser> {
-        const createdUser = userCommand.registerUser(userDto);
+    async registerUser(userDto: CreateUserDTO): Promise<IUser> {
+        const createdUser = await userCommand.registerUser(userDto);
         return createdUser;
     }
-    updateUser(userDto: UpdateUserDTO): Promise<IUser> {
-        throw new Error("Method not implemented.");
+    async login(email: string, password: string): Promise<string>
+    {
+        const retrievedUser = await userQuery.getUserByEmail(email);
+        const isMatch = await retrievedUser.comparePassword(password);
+        if(!isMatch){throw new ValidationException("Credenciales invalidas")};
+        const payload = { id: retrievedUser.id};
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h'});
+        return token;
     }
-    deleteUser(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async updateUser(userDto: UpdateUserDTO): Promise<IUser> {
+        const updatedUser = await userCommand.updateUser(userDto);
+        return updatedUser;
+    }
+    async updatePassword(userDto: UpdatePasswordDTO): Promise<IUser> {
+        const retrievedUser = await userQuery.getUserById(userDto.id);
+        const isMatch = await retrievedUser.comparePassword(userDto.oldPassword);
+        if(!isMatch){throw new ValidationException("Credenciales invalidas")};
+        const updatedUser = await userCommand.updatePassword(userDto);
+        return updatedUser;
+    }
+    async deleteUser(id: string): Promise<void> {
+        await userCommand.deleteUser(id);
     }    
 }
 export default UserService;
