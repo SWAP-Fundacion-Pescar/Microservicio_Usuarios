@@ -1,6 +1,7 @@
 import UserCommand from "../../Infrastructure/Command/UserCommand";
 import UserQuery from "../../Infrastructure/Query/UserQuery";
 import CreateUserDTO from "../DTO/CreateUserDTO";
+import LoginDTO from "../DTO/LoginDTO";
 import UpdatePasswordDTO from "../DTO/UpdatePasswordDTO";
 import UpdateUserDTO from "../DTO/UpdateUserDTO";
 import ValidationException from "../Exceptions/ValidationException";
@@ -34,10 +35,10 @@ class UserService implements IUserService
         const createdUser = await userCommand.registerUser(userDto);
         return createdUser;
     }
-    async login(email: string, password: string): Promise<string>
+    async login(loginDto: LoginDTO): Promise<string>
     {
-        const retrievedUser = await userQuery.getUserByEmail(email);
-        const isMatch = await retrievedUser.comparePassword(password);
+        const retrievedUser = await userQuery.getUserByEmail(loginDto.email);
+        const isMatch = await retrievedUser.comparePassword(loginDto.password);
         if(!isMatch){throw new ValidationException("Credenciales invalidas")};
         const payload = { id: retrievedUser.id};
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h'});
@@ -49,7 +50,7 @@ class UserService implements IUserService
     }
     async updatePassword(userDto: UpdatePasswordDTO): Promise<IUser> {
         const retrievedUser = await userQuery.getUserById(userDto.id);
-        const isMatch = await retrievedUser.comparePassword(userDto.oldPassword);
+        const isMatch = await retrievedUser.comparePassword(userDto.currentPassword);
         if(!isMatch){throw new ValidationException("Credenciales invalidas")};
         const updatedUser = await userCommand.updatePassword(userDto);
         return updatedUser;

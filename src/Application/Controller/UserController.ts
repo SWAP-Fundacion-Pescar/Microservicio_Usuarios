@@ -3,6 +3,9 @@ import IUserService from "../Interfaces/User/IUserService";
 import CreateUserDTO from '../DTO/CreateUserDTO';
 import UpdateUserDTO from '../DTO/UpdateUserDTO';
 import UpdatePasswordDTO from '../DTO/UpdatePasswordDTO';
+import CreatedUserResponse from '../Response/CreatedUserResponse';
+import LoginDTO from '../DTO/LoginDTO';
+import GetUserResponse from '../Response/GetUserResponse';
 
 class UserController
 {
@@ -27,7 +30,8 @@ class UserController
             const { username, name, lastName, email, password, city } = req.body;
             const createUserDTO = new CreateUserDTO(username, name, lastName, email, password, city);
             const createdUser = await this._userService.registerUser(createUserDTO);
-            res.status(201).json(createdUser);
+            const createdUserResponse = new CreatedUserResponse(createdUser);
+            res.status(201).json(createdUserResponse);
         }   
         catch (error)
         {
@@ -39,7 +43,8 @@ class UserController
         try
         {
             const { email, password } = req.body;
-            const token = await this._userService.login(email, password);
+            const loginDTO = new LoginDTO( email, password);
+            const token = await this._userService.login(loginDTO);
             res.status(200).json(token);
         }   
         catch (error)
@@ -51,9 +56,10 @@ class UserController
     {
         try
         {
-            const id = req.query.id as string;
-            const retrievedUser = await this._userService.getUserById(id);
-            res.status(200).json(retrievedUser);
+            const {id} = req.query;
+            const retrievedUser = await this._userService.getUserById(id as string);
+            const getUserResponse = new GetUserResponse(retrievedUser);
+            res.status(200).json(getUserResponse);
         }
         catch (error)
         {
@@ -64,9 +70,14 @@ class UserController
     {
         try
         {
-            const role = req.query.role as string;
-            const retrievedUser = await this._userService.getUsersByRole(role);
-            res.status(200).json(retrievedUser);
+            const { role } = req.query;
+            const retrievedUsers = await this._userService.getUsersByRole(role as string);
+            const getUsersResponse: Array<GetUserResponse> = new Array<GetUserResponse>();
+            retrievedUsers.forEach(user => {
+                const getUserResponse = new GetUserResponse(user);
+                getUsersResponse.push(getUserResponse);
+            });
+            res.status(200).json(getUsersResponse);
         }
         catch (error)
         {
@@ -77,9 +88,14 @@ class UserController
     {
         try
         {
-            const city = req.query.city as string;
-            const retrievedUser = await this._userService.getUsersByCity(city);
-            res.status(200).json(retrievedUser);
+            const { city } = req.query;
+            const retrievedUsers = await this._userService.getUsersByCity(city as string);
+            const getUsersResponse: Array<GetUserResponse> = new Array<GetUserResponse>();
+            retrievedUsers.forEach(user => {
+                const getUserResponse = new GetUserResponse(user);
+                getUsersResponse.push(getUserResponse);
+            });
+            res.status(200).json(getUsersResponse);
         }
         catch (error)
         {
@@ -90,9 +106,14 @@ class UserController
     {
         try
         {
-            const puntuation = parseInt(req.query.puntuation as string);
-            const retrievedUser = await this._userService.getUsersByPuntuation(puntuation);
-            res.status(200).json(retrievedUser);
+            const {puntuation} = req.query;
+            const retrievedUsers = await this._userService.getUsersByPuntuation(parseInt(puntuation as string));
+            const getUsersResponse: Array<GetUserResponse> = new Array<GetUserResponse>();
+            retrievedUsers.forEach(user => {
+                const getUserResponse = new GetUserResponse(user);
+                getUsersResponse.push(getUserResponse);
+            });
+            res.status(200).json(getUsersResponse);
         }
         catch (error)
         {
@@ -117,10 +138,11 @@ class UserController
     {
         try
         {
-            const {id, oldPassword, newPassword} = req.body;
-            const updatePasswordDto = new UpdatePasswordDTO(id, oldPassword, newPassword);
+            const {id, currentPassword, newPassword} = req.body;            
+            const updatePasswordDto = new UpdatePasswordDTO(id, currentPassword, newPassword);
             const updatedUser = await this._userService.updatePassword(updatePasswordDto);
-            res.status(200).json(updatedUser);
+            const userResponse = new GetUserResponse(updatedUser);
+            res.status(201).json(userResponse);
         }
         catch (error)
         {
@@ -131,9 +153,9 @@ class UserController
     {
         try
         {
-            const id = req.query.id as string;
-            await this._userService.deleteUser(id);
-            res.status(200).json("Usuario eleminado");
+            const { id } = req.query;
+            await this._userService.deleteUser(id as string);
+            res.status(200).json("Usuario eliminado");
         }
         catch (error)
         {
