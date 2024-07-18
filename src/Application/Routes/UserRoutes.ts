@@ -1,11 +1,13 @@
 import { Router } from "express";
 import UserController from "../Controller/UserController";
 import UserService from "../Service/UserService";
+import UserMapper from "../Mappers/UserMapper";
 
 
 const userRouter = Router();
 const userService = new UserService();
-const userController = new UserController(userService);
+const userMapper = new UserMapper();
+const userController = new UserController(userService, userMapper);
 /**
  * @swagger
  * tags:

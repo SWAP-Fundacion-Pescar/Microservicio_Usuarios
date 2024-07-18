@@ -1,18 +1,19 @@
 import { Response, Request, NextFunction } from 'express';
 import IUserService from "../Interfaces/User/IUserService";
-import CreateUserDTO from '../DTO/CreateUserDTO';
 import UpdateUserDTO from '../DTO/UpdateUserDTO';
 import UpdatePasswordDTO from '../DTO/UpdatePasswordDTO';
 import CreatedUserResponse from '../Response/CreatedUserResponse';
-import LoginDTO from '../DTO/LoginDTO';
 import GetUserResponse from '../Response/GetUserResponse';
+import UserMapper from '../Mappers/UserMapper';
 
 class UserController
 {
     public _userService: IUserService;
-    constructor(userService: IUserService)
+    public _userMapper: UserMapper
+    constructor(userService: IUserService, userMapper: UserMapper)
     {
         this._userService = userService;
+        this._userMapper = userMapper;
         this.registerUser = this.registerUser.bind(this);  
         this.login = this.login.bind(this);
         this.getUserById = this.getUserById.bind(this);
@@ -27,10 +28,9 @@ class UserController
     {
         try
         {
-            const { username, name, lastName, email, password, city } = req.body;
-            const createUserDTO = new CreateUserDTO(username, name, lastName, email, password, city);
-            const createdUser = await this._userService.registerUser(createUserDTO);
-            const createdUserResponse = new CreatedUserResponse(createdUser);
+            const createUserDto = this._userMapper.CreateCreateUserDTO(req);
+            const createdUser = await this._userService.registerUser(createUserDto);
+            const createdUserResponse = this._userMapper.CreateCreatedUserResponse(createdUser);            
             res.status(201).json(createdUserResponse);
         }   
         catch (error)
@@ -42,9 +42,8 @@ class UserController
     {
         try
         {
-            const { email, password } = req.body;
-            const loginDTO = new LoginDTO( email, password);
-            const token = await this._userService.login(loginDTO);
+            const loginDto = this._userMapper.CreateLoginDTO(req);
+            const token = await this._userService.login(loginDto);
             res.status(200).json(token);
         }   
         catch (error)
@@ -58,7 +57,7 @@ class UserController
         {
             const {id} = req.query;
             const retrievedUser = await this._userService.getUserById(id as string);
-            const getUserResponse = new GetUserResponse(retrievedUser);
+            const getUserResponse = this._userMapper.CreateGetUserResponse(retrievedUser);
             res.status(200).json(getUserResponse);
         }
         catch (error)
@@ -72,11 +71,7 @@ class UserController
         {
             const { role } = req.query;
             const retrievedUsers = await this._userService.getUsersByRole(role as string);
-            const getUsersResponse: Array<GetUserResponse> = new Array<GetUserResponse>();
-            retrievedUsers.forEach(user => {
-                const getUserResponse = new GetUserResponse(user);
-                getUsersResponse.push(getUserResponse);
-            });
+            const getUsersResponse: Array<GetUserResponse> = this._userMapper.CreateGetUsersResponse(retrievedUsers);
             res.status(200).json(getUsersResponse);
         }
         catch (error)
@@ -90,11 +85,7 @@ class UserController
         {
             const { city } = req.query;
             const retrievedUsers = await this._userService.getUsersByCity(city as string);
-            const getUsersResponse: Array<GetUserResponse> = new Array<GetUserResponse>();
-            retrievedUsers.forEach(user => {
-                const getUserResponse = new GetUserResponse(user);
-                getUsersResponse.push(getUserResponse);
-            });
+            const getUsersResponse: Array<GetUserResponse> = this._userMapper.CreateGetUsersResponse(retrievedUsers);
             res.status(200).json(getUsersResponse);
         }
         catch (error)
@@ -108,11 +99,7 @@ class UserController
         {
             const {puntuation} = req.query;
             const retrievedUsers = await this._userService.getUsersByPuntuation(parseInt(puntuation as string));
-            const getUsersResponse: Array<GetUserResponse> = new Array<GetUserResponse>();
-            retrievedUsers.forEach(user => {
-                const getUserResponse = new GetUserResponse(user);
-                getUsersResponse.push(getUserResponse);
-            });
+            const getUsersResponse: Array<GetUserResponse> = this._userMapper.CreateGetUsersResponse(retrievedUsers);
             res.status(200).json(getUsersResponse);
         }
         catch (error)
@@ -138,10 +125,9 @@ class UserController
     {
         try
         {
-            const {id, currentPassword, newPassword} = req.body;            
-            const updatePasswordDto = new UpdatePasswordDTO(id, currentPassword, newPassword);
+            const updatePasswordDto = this._userMapper.CreateUpdatePasswordDTO(req);            
             const updatedUser = await this._userService.updatePassword(updatePasswordDto);
-            const userResponse = new GetUserResponse(updatedUser);
+            const userResponse = this._userMapper.CreateCreatedUserResponse(updatedUser);
             res.status(201).json(userResponse);
         }
         catch (error)
