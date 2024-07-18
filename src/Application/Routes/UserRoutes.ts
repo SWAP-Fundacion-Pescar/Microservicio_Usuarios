@@ -2,6 +2,8 @@ import { Router } from "express";
 import UserController from "../Controller/UserController";
 import UserService from "../Service/UserService";
 import UserMapper from "../Mappers/UserMapper";
+import { validateCreateUser, validateLogin, validateUpdatePassword } from "../Middleware/Validator/UserValidator";
+import validationErrorHandler from "../Middleware/Validator/ValidationErrorHandler";
 
 
 const userRouter = Router();
@@ -35,7 +37,7 @@ const userController = new UserController(userService, userMapper);
  *             schema:
  *               $ref: '#/components/schemas/CreatedUserResponse'
  */
-userRouter.post('/user/register', userController.registerUser);
+userRouter.post('/user/register', validateCreateUser, validationErrorHandler, userController.registerUser);
 
 /**
  * @swagger
@@ -66,7 +68,7 @@ userRouter.post('/user/register', userController.registerUser);
  *             example: {error: "There was an error"}
  */
 
-userRouter.post('/user/login', userController.login);
+userRouter.post('/user/login', validateLogin, validationErrorHandler, userController.login);
 
 
 /**
@@ -127,7 +129,7 @@ userRouter.get('/user', userController.getUserById);
  *              example: {error: Unauthorized}
  */
 
-userRouter.put('/user/password', userController.updatePassword);
+userRouter.put('/user/password', validateUpdatePassword, validationErrorHandler, userController.updatePassword);
 
 
 /**

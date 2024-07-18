@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import NotFoundException from "../Exceptions/NotFoundException";
 import ValidationException from "../Exceptions/ValidationException";
 import { MongooseError } from "mongoose";
+import { MongoServerError } from 'mongodb';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => 
     {
@@ -16,6 +17,10 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
         if(err instanceof MongooseError)
             {
                 res.status(500).json("Database Error");
+            }
+        if(err instanceof MongoServerError)
+            {
+                res.status(500).json(err.message);
             }
         console.log(err.stack);
         res.status(500).json({error: "Internal server error"});
