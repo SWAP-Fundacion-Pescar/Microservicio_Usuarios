@@ -13,6 +13,9 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema
         role: {type: String, required: true, default: "member"},
         city: {type: String, required: true},
         puntuation: {type: Number, required: true, default: 0},
+        isVerified: {type: Boolean, default: false},
+        verificationToken: {type: String},
+        createdAt: {type: Date, default : Date.now}
     }
 );
 userSchema.pre<IUserDocument>('save', async function (next)

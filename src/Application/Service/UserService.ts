@@ -1,9 +1,11 @@
 import UserCommand from "../../Infrastructure/Command/UserCommand";
+import sendVerificationEmail from "../../Infrastructure/Persistence/Config/Mail";
 import UserQuery from "../../Infrastructure/Query/UserQuery";
 import CreateUserDTO from "../DTO/CreateUserDTO";
 import LoginDTO from "../DTO/LoginDTO";
 import UpdatePasswordDTO from "../DTO/UpdatePasswordDTO";
 import UpdateUserDTO from "../DTO/UpdateUserDTO";
+import UnauthorizedException from "../Exceptions/UnauthorizedException";
 import ValidationException from "../Exceptions/ValidationException";
 import IUser from "../Interfaces/User/IUser";
 import IUserService from "../Interfaces/User/IUserService";
@@ -32,7 +34,11 @@ class UserService implements IUserService
         return retrievedUser;
     }
     async registerUser(userDto: CreateUserDTO): Promise<IUser> {
+        const userEmail = userDto.email
+        const verificationToken = jwt.sign({userEmail}, JWT_SECRET, { expiresIn: '1d' });
+        userDto.verificationToken = verificationToken;
         const createdUser = await userCommand.registerUser(userDto);
+        sendVerificationEmail(createdUser.email, createdUser.verificationToken)
         return createdUser;
     }
     async login(loginDto: LoginDTO): Promise<string>
@@ -43,6 +49,29 @@ class UserService implements IUserService
         const payload = { id: retrievedUser.id};
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h'});
         return token;
+    }
+    async verifyEmail(token: string): Promise<void> 
+    {
+        
+        if(!token)
+            {
+                throw new Error('Invalid token');
+            }
+        jwt.verify(token, JWT_SECRET, async function(err, decoded)
+        {
+            if(err)
+                {
+                    throw new UnauthorizedException('Invalid token');
+                }                  
+            if(typeof decoded == 'object' && 'userEmail' in decoded)
+                {
+                    await userCommand.verifyEmail(decoded.userEmail, token);
+                }
+            else
+            {
+                throw new Error('Invalid token');
+            }            
+        })
     }
     async updateUser(userDto: UpdateUserDTO): Promise<IUser> {
         const updatedUser = await userCommand.updateUser(userDto);

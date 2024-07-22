@@ -12,6 +12,7 @@ interface IUserService
     
     registerUser(userDto: CreateUserDTO): Promise<IUser>;
     login(loginDto: LoginDTO): Promise<string>;
+    verifyEmail(token: string): Promise<void>;
     updateUser(userDto: UpdateUserDTO): Promise<IUser>;
     updatePassword(userDto: UpdatePasswordDTO): Promise<IUser>;
     deleteUser(id: string): Promise<void>;

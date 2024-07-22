@@ -16,6 +16,7 @@ class UserController
         this._userMapper = userMapper;
         this.registerUser = this.registerUser.bind(this);  
         this.login = this.login.bind(this);
+        this.verifyEmail = this.verifyEmail.bind(this);
         this.getUserById = this.getUserById.bind(this);
         this.getUsersByRole = this.getUsersByRole.bind(this);
         this.getUsersByCity = this.getUsersByCity.bind(this);
@@ -47,6 +48,19 @@ class UserController
             res.status(200).json(token);
         }   
         catch (error)
+        {
+            next(error);
+        }
+    }
+    public async verifyEmail( req: Request, res: Response, next: NextFunction): Promise<void>
+    {
+        try
+        {
+            const { token } = req.query;
+            await this._userService.verifyEmail(token as string);
+            res.status(200).send('Email verificado exitosamente')
+        }
+        catch(error)
         {
             next(error);
         }

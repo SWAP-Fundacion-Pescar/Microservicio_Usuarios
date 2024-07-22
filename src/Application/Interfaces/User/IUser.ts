@@ -8,7 +8,10 @@ interface IUser
     password: string,
     city: string,
     role: string,
-    puntuation: number
+    puntuation: number,
+    isVerified: boolean,
+    verificationToken: string,
+    createdAt: Date,
 }
 
 export default IUser;

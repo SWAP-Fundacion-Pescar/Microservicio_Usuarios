@@ -19,7 +19,7 @@ const userController = new UserController(userService, userMapper);
 
 /**
  * @swagger
- * /api/user/register:
+ * /api/users/register:
  *   post:
  *     summary: Register a user
  *     tags: [Users]
@@ -37,11 +37,36 @@ const userController = new UserController(userService, userMapper);
  *             schema:
  *               $ref: '#/components/schemas/CreatedUserResponse'
  */
-userRouter.post('/user/register', validateCreateUser, validationErrorHandler, userController.registerUser);
+userRouter.post('/users/register', validateCreateUser, validationErrorHandler, userController.registerUser);
 
 /**
  * @swagger
- * /api/user/login:
+ * /api/users/verify-email:
+ *   get:
+ *     summary: Verify user email
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User token
+ *     responses:
+ *       200:
+ *         description: User verufued
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: 'string'
+ *               example: 'Verified user'
+ */
+
+userRouter.get('/users/verify-email', userController.verifyEmail);
+
+/**
+ * @swagger
+ * /api/users/login:
  *  post:
  *    summary: Login a user
  *    tags: [Users]
@@ -68,12 +93,14 @@ userRouter.post('/user/register', validateCreateUser, validationErrorHandler, us
  *             example: {error: "There was an error"}
  */
 
-userRouter.post('/user/login', validateLogin, validationErrorHandler, userController.login);
+
+
+userRouter.post('/users/login', validateLogin, validationErrorHandler, userController.login);
 
 
 /**
  * @swagger
- * /api/user:
+ * /api/users:
  *  get:
  *    summary: Get a user by ID
  *    tags: [Users]
@@ -100,10 +127,10 @@ userRouter.post('/user/login', validateLogin, validationErrorHandler, userContro
  *              example: {error: 'There was an error'}
  * 
  */
-userRouter.get('/user', userController.getUserById);
+userRouter.get('/users', userController.getUserById);
 /**
  * @swagger
- * /api/user/password:
+ * /api/users/password:
  *  put:
  *    summary: Update user password
  *    tags: [Users]
@@ -129,12 +156,12 @@ userRouter.get('/user', userController.getUserById);
  *              example: {error: Unauthorized}
  */
 
-userRouter.put('/user/password', validateUpdatePassword, validationErrorHandler, userController.updatePassword);
+userRouter.put('/users/password', validateUpdatePassword, validationErrorHandler, userController.updatePassword);
 
 
 /**
  * @swagger
- * /api/user/delete:
+ * /api/users/delete:
  *   delete:
  *     summary: Delete user
  *     tags: [Users]
@@ -161,11 +188,11 @@ userRouter.put('/user/password', validateUpdatePassword, validationErrorHandler,
  *               type: 'object'
  *               example: {error: 'There was an error'}
  */
-userRouter.delete('/user/delete', userController.deleteUser);
+userRouter.delete('/users/delete', userController.deleteUser);
 
 /**
  * @swagger
- * /api/user/role:
+ * /api/users/role:
  *  get:
  *    summary: Get users by role
  *    tags: [Users]
@@ -193,11 +220,11 @@ userRouter.delete('/user/delete', userController.deleteUser);
  */
 
 
-userRouter.get('/user/role', userController.getUsersByRole);
+userRouter.get('/users/role', userController.getUsersByRole);
 
 /**
  * @swagger
- * /api/user/city:
+ * /api/users/city:
  *  get:
  *    summary: Get users by city
  *    tags: [Users]
@@ -223,11 +250,11 @@ userRouter.get('/user/role', userController.getUsersByRole);
  *              type: object
  *              example: {error: 'There was an error'}
  */
-userRouter.get('/user/city', userController.getUsersByCity);
+userRouter.get('/users/city', userController.getUsersByCity);
 
 /**
  * @swagger
- * /api/user/puntuation:
+ * /api/users/puntuation:
  *  get:
  *    summary: Get users by puntuation
  *    tags: [Users]
@@ -253,5 +280,5 @@ userRouter.get('/user/city', userController.getUsersByCity);
  *              type: object
  *              example: {error: 'There was an error'}
  */
-userRouter.get('/user/puntuation', userController.getUsersByPuntuation);
+userRouter.get('/users/puntuation', userController.getUsersByPuntuation);
 export default userRouter;

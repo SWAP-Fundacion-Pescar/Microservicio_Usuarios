@@ -10,6 +10,9 @@ interface IUserDocument extends Document {
     city: string;
     role: string;
     puntuation: number;
+    isVerified: boolean;
+    verificationToken: string;
+    createdAt: Date;
     comparePassword: (password: string) => Promise<boolean>;
 }
 export default IUserDocument;

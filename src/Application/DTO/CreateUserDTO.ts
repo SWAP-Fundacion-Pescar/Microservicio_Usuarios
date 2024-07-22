@@ -6,6 +6,7 @@ class CreateUserDTO
     email: string;
     password: string;
     city: string;
+    verificationToken?: string;
     constructor(username: string, name: string, lastName: string, email: string, password: string, city: string)
     {
         this.username = username;
