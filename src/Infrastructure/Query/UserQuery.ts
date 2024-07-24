@@ -1,6 +1,6 @@
 import NotFoundException from "../../Application/Exceptions/NotFoundException";
-import IUserDocument from "../../Application/Interfaces/User/IUserDocument";
-import IUserQuery from "../../Application/Interfaces/User/IUserQuery";
+import IUserDocument from "../Interfaces/IUserDocument";
+import IUserQuery from "../Interfaces/IUserQuery";
 import UserModel from "../Persistence/Models/UserModel";
 
 class UserQuery implements IUserQuery

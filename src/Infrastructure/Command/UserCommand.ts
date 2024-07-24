@@ -3,8 +3,8 @@ import UpdatePasswordDTO from "../../Application/DTO/UpdatePasswordDTO";
 import UpdateUserDTO from "../../Application/DTO/UpdateUserDTO";
 import NotFoundException from "../../Application/Exceptions/NotFoundException";
 import IUser from "../../Application/Interfaces/User/IUser";
-import IUserCommand from "../../Application/Interfaces/User/IUserCommand";
-import IUserDocument from "../../Application/Interfaces/User/IUserDocument";
+import IUserCommand from "../Interfaces/IUserCommand";
+import IUserDocument from "../Interfaces/IUserDocument";
 import UserModel from "../Persistence/Models/UserModel";
 import bcrypt from 'bcrypt';
 class UserCommand implements IUserCommand
@@ -17,10 +17,6 @@ class UserCommand implements IUserCommand
     }
     async verifyEmail(email: string, token: string): Promise<void> 
     {
-        console.log("EMAAAAAAAAAAAIL");
-        console.log(email);
-        console.log("TOOOOOOOOOOOOOOOOOOOKEN");
-        console.log(token);
         const verifiedUser = await UserModel.findOneAndUpdate({email: email, verificationToken: token}, {isVerified: true, verificationToken: null}, { new: true});
         if(!verifiedUser){ throw new NotFoundException('Usuario no encontrado') };
         await verifiedUser.save();

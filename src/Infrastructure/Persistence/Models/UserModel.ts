@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import IUserDocument from "../../../Application/Interfaces/User/IUserDocument";
+import IUserDocument from "../../Interfaces/IUserDocument";
 import bcrypt from 'bcrypt';
 
 const userSchema: Schema<IUserDocument> = new mongoose.Schema

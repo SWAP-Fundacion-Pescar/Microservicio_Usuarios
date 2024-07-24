@@ -1,8 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import IUserService from "../Interfaces/User/IUserService";
 import UpdateUserDTO from '../DTO/UpdateUserDTO';
-import UpdatePasswordDTO from '../DTO/UpdatePasswordDTO';
-import CreatedUserResponse from '../Response/CreatedUserResponse';
 import GetUserResponse from '../Response/GetUserResponse';
 import UserMapper from '../Mappers/UserMapper';
 
