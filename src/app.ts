@@ -3,7 +3,7 @@ import MongoDB from './Infrastructure/Persistence/Config/MongoDB';
 import userRouter from './Application/Routes/UserRoutes';
 import requestLogger from './Application/Middleware/RequestLogger';
 import errorHandler from './Application/Middleware/ErrorHandler';
-import swaggerSpec from './Infrastructure/Persistence/Config/Swagger';
+import swaggerSpec from './Infrastructure/Config/Swagger';
 import swaggerUi from 'swagger-ui-express';
 MongoDB();
 const app = express();

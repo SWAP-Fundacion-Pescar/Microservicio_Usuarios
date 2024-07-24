@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import UserQuery from "../../Query/UserQuery";
+import UserQuery from "../Query/UserQuery";
 
 const userQuery = new UserQuery();
 

@@ -1,5 +1,5 @@
 import UserCommand from "../../Infrastructure/Command/UserCommand";
-import sendVerificationEmail from "../../Infrastructure/Persistence/Config/Mail";
+import sendVerificationEmail from "../../Infrastructure/Config/Mail";
 import UserQuery from "../../Infrastructure/Query/UserQuery";
 import CreateUserDTO from "../DTO/CreateUserDTO";
 import LoginDTO from "../DTO/LoginDTO";
