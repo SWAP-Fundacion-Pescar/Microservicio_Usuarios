@@ -16,7 +16,7 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
         if (user) {
             return done(null, user);
         }
-        return done(null, false);
+        return done(null, false, { message: 'No esta autorizado'});
     } catch (err) {
         return done(err, false);
     }

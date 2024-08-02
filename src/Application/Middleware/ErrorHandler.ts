@@ -6,6 +6,10 @@ import { MongoServerError } from 'mongodb';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => 
     {
+        if(err.name === 'UnauthorizedError')
+            {
+                res.status(401).json({error: 'No esta autorizado'})
+            }
         if(err instanceof NotFoundException)
             {
                 res.status(404).json({error: err.message});                

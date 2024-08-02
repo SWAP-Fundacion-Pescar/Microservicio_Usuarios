@@ -14,6 +14,18 @@ const swaggerDefinition = {
         },
     ],
     components:{
+        securitySchemes: {
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+            },
+        },
+        security: [
+            {
+                bearerAuth: [],
+            },
+        ],
         schemas:{
             CreateUserDTO:{
                 type: 'object',

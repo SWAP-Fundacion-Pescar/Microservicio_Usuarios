@@ -5,13 +5,14 @@ import requestLogger from './Application/Middleware/RequestLogger';
 import errorHandler from './Application/Middleware/ErrorHandler';
 import swaggerSpec from './Infrastructure/Config/Swagger';
 import swaggerUi from 'swagger-ui-express';
+import passport from './Infrastructure/Config/Passport';
 MongoDB();
 const app = express();
 
 
 
 
-
+app.use(passport.initialize());
 app.use(express.json());
 app.use(requestLogger);
 app.use('/api', userRouter);

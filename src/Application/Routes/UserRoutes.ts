@@ -4,6 +4,8 @@ import UserService from "../Service/UserService";
 import UserMapper from "../Mappers/UserMapper";
 import { validateCreateUser, validateLogin, validateUpdatePassword } from "../Middleware/Validator/UserValidator";
 import validationErrorHandler from "../Middleware/Validator/ValidationErrorHandler";
+import { authenticateJwt } from "../Middleware/passportMiddleware";
+
 
 
 const userRouter = Router();
@@ -93,8 +95,6 @@ userRouter.get('/users/verify-email', userController.verifyEmail);
  *             example: {error: "There was an error"}
  */
 
-
-
 userRouter.post('/users/login', validateLogin, validationErrorHandler, userController.login);
 
 
@@ -133,6 +133,8 @@ userRouter.get('/users', userController.getUserById);
  * /api/users/password:
  *  put:
  *    summary: Update user password
+ *    security:
+ *      - bearerAuth: []
  *    tags: [Users]
  *    requestBody:
  *      required: true
@@ -156,7 +158,7 @@ userRouter.get('/users', userController.getUserById);
  *              example: {error: Unauthorized}
  */
 
-userRouter.put('/users/password', validateUpdatePassword, validationErrorHandler, userController.updatePassword);
+userRouter.put('/users/password', authenticateJwt, validateUpdatePassword, validationErrorHandler, userController.updatePassword);
 
 
 /**
@@ -164,6 +166,8 @@ userRouter.put('/users/password', validateUpdatePassword, validationErrorHandler
  * /api/users/delete:
  *   delete:
  *     summary: Delete user
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Users]
  *     parameters:
  *       - in: query
@@ -188,7 +192,7 @@ userRouter.put('/users/password', validateUpdatePassword, validationErrorHandler
  *               type: 'object'
  *               example: {error: 'There was an error'}
  */
-userRouter.delete('/users/delete', userController.deleteUser);
+userRouter.delete('/users/delete', authenticateJwt, userController.deleteUser);
 
 /**
  * @swagger
