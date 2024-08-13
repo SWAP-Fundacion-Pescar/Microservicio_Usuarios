@@ -118,11 +118,7 @@ const swaggerDefinition = {
             },
             UpdatePasswordDTO:{
                 type: 'object',
-                properties:{
-                    id:{
-                        type: 'string',
-                        description: 'User ID'
-                    },
+                properties:{                    
                     currentPassword:{
                         type: 'string',
                         description: 'Current user password'

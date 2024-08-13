@@ -136,9 +136,8 @@ class UserController
     public async updatePassword( req: Request, res: Response, next: NextFunction): Promise<void>
     {
         try
-        {
-            console.log(req.body.token.id);
-            const updatePasswordDto = this._userMapper.CreateUpdatePasswordDTO(req);            
+        {           
+            const updatePasswordDto = this._userMapper.CreateUpdatePasswordDTO(req, req.body.decoded.id);            
             const updatedUser = await this._userService.updatePassword(updatePasswordDto);
             const userResponse = this._userMapper.CreateCreatedUserResponse(updatedUser);
             res.status(201).json(userResponse);
@@ -152,8 +151,7 @@ class UserController
     {
         try
         {
-            const { id } = req.query;
-            await this._userService.deleteUser(id as string);
+            await this._userService.deleteUser(req.body.decoded.id as string);
             res.status(200).json("Usuario eliminado");
         }
         catch (error)

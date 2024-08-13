@@ -169,13 +169,6 @@ userRouter.put('/users/password', authenticateJwt, validateUpdatePassword, valid
  *     security:
  *       - bearerAuth: []
  *     tags: [Users]
- *     parameters:
- *       - in: query
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: User ID
  *     responses:
  *       200:
  *         description: User deleted

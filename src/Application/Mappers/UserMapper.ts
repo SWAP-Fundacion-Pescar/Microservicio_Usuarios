@@ -21,9 +21,9 @@ class UserMapper
         const loginDto = new LoginDTO( email, password);
         return loginDto
     }
-    public CreateUpdatePasswordDTO(req: Request): UpdatePasswordDTO
+    public CreateUpdatePasswordDTO(req: Request, id: string): UpdatePasswordDTO
     {
-        const {id, currentPassword, newPassword} = req.body;            
+        const {currentPassword, newPassword} = req.body;            
         const updatePasswordDto = new UpdatePasswordDTO(id, currentPassword, newPassword);
         return updatePasswordDto;
     }
