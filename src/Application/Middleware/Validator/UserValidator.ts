@@ -25,8 +25,8 @@ const validateCreateUser = [
 ]
 
 const validateLogin = [
-    body('email').isEmail().withMessage('Must be a valid email'),
-    body('password').isString().withMessage('Password must be a string')
+    body('email').isEmail().withMessage('Must be a valid email').notEmpty(),
+    body('password').isString().withMessage('Password must be a string').notEmpty()
 ]
 
 const validateUpdatePassword = [

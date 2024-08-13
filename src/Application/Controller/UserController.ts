@@ -137,6 +137,7 @@ class UserController
     {
         try
         {
+            console.log(req.body.token.id);
             const updatePasswordDto = this._userMapper.CreateUpdatePasswordDTO(req);            
             const updatedUser = await this._userService.updatePassword(updatePasswordDto);
             const userResponse = this._userMapper.CreateCreatedUserResponse(updatedUser);
