@@ -59,7 +59,7 @@ class UserController
     {
         try
         {
-            const { token } = req.query;
+            const { token } = req.params;
             await this._userService.verifyEmail(token as string);
             res.status(200).send('Email verificado exitosamente')
         }
@@ -72,7 +72,8 @@ class UserController
     {
         try
         {
-            const {id} = req.query;
+            const {id} = req.params;
+            console.log("Here is the id:", id);
             const retrievedUser = await this._userService.getUserById(id as string);
             const getUserResponse = this._userMapper.CreateGetUserResponse(retrievedUser);
             res.status(200).json(getUserResponse);
@@ -86,7 +87,7 @@ class UserController
     {
         try
         {
-            const { role } = req.query;
+            const { role } = req.params;
             const retrievedUsers = await this._userService.getUsersByRole(role as string);
             const getUsersResponse: Array<GetUserResponse> = this._userMapper.CreateGetUsersResponse(retrievedUsers);
             res.status(200).json(getUsersResponse);
@@ -100,7 +101,7 @@ class UserController
     {
         try
         {
-            const { city } = req.query;
+            const { city } = req.params;
             const retrievedUsers = await this._userService.getUsersByCity(city as string);
             const getUsersResponse: Array<GetUserResponse> = this._userMapper.CreateGetUsersResponse(retrievedUsers);
             res.status(200).json(getUsersResponse);
@@ -114,7 +115,7 @@ class UserController
     {
         try
         {
-            const {puntuation} = req.query;
+            const {puntuation} = req.params;
             const retrievedUsers = await this._userService.getUsersByPuntuation(parseInt(puntuation as string));
             const getUsersResponse: Array<GetUserResponse> = this._userMapper.CreateGetUsersResponse(retrievedUsers);
             res.status(200).json(getUsersResponse);

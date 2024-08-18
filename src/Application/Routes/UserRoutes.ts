@@ -48,7 +48,7 @@ userRouter.post('/users/register', validateCreateUser, validationErrorHandler, u
  *     summary: Verify user email
  *     tags: [Users]
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: token
  *         schema:
  *           type: string
@@ -64,7 +64,7 @@ userRouter.post('/users/register', validateCreateUser, validationErrorHandler, u
  *               example: 'Verified user'
  */
 
-userRouter.get('/users/verify-email', userController.verifyEmail);
+userRouter.get('/users/verify-email/:token', userController.verifyEmail);
 
 /**
  * @swagger
@@ -100,12 +100,12 @@ userRouter.post('/users/login', validateLogin, validationErrorHandler, userContr
 
 /**
  * @swagger
- * /api/users:
+ * /api/users/{id}:
  *  get:
  *    summary: Get a user by ID
  *    tags: [Users]
  *    parameters:
- *      - in: query
+ *      - in: path
  *        name: id
  *        schema:
  *          type: string
@@ -127,7 +127,7 @@ userRouter.post('/users/login', validateLogin, validationErrorHandler, userContr
  *              example: {error: 'There was an error'}
  * 
  */
-userRouter.get('/users', userController.getUserById);
+userRouter.get('/users/:id', userController.getUserById);
 /**
  * @swagger
  * /api/users/password:
@@ -189,12 +189,12 @@ userRouter.delete('/users/delete', authenticateJwt, userController.deleteUser);
 
 /**
  * @swagger
- * /api/users/role:
+ * /api/users/role/{role}:
  *  get:
  *    summary: Get users by role
  *    tags: [Users]
  *    parameters:
- *      - in: query
+ *      - in: path
  *        name: role
  *        schema:
  *          type: string
@@ -217,16 +217,16 @@ userRouter.delete('/users/delete', authenticateJwt, userController.deleteUser);
  */
 
 
-userRouter.get('/users/role', userController.getUsersByRole);
+userRouter.get('/users/role/:role', userController.getUsersByRole);
 
 /**
  * @swagger
- * /api/users/city:
+ * /api/users/city/{city}:
  *  get:
  *    summary: Get users by city
  *    tags: [Users]
  *    parameters:
- *      - in: query
+ *      - in: path
  *        name: city
  *        schema:
  *          type: string
@@ -247,16 +247,16 @@ userRouter.get('/users/role', userController.getUsersByRole);
  *              type: object
  *              example: {error: 'There was an error'}
  */
-userRouter.get('/users/city', userController.getUsersByCity);
+userRouter.get('/users/city/:city', userController.getUsersByCity);
 
 /**
  * @swagger
- * /api/users/puntuation:
+ * /api/users/puntuation/{puntuation}:
  *  get:
  *    summary: Get users by puntuation
  *    tags: [Users]
  *    parameters:
- *      - in: query
+ *      - in: path
  *        name: puntuation
  *        schema:
  *          type: string
@@ -277,5 +277,5 @@ userRouter.get('/users/city', userController.getUsersByCity);
  *              type: object
  *              example: {error: 'There was an error'}
  */
-userRouter.get('/users/puntuation', userController.getUsersByPuntuation);
+userRouter.get('/users/puntuation/:puntuation', userController.getUsersByPuntuation);
 export default userRouter;
