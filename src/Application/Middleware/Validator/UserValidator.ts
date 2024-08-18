@@ -30,7 +30,6 @@ const validateLogin = [
 ]
 
 const validateUpdatePassword = [
-    body('id').isString().withMessage('Id must be a string'),
     body('currentPassword').isString().withMessage('Current Password must be a string'),
     body('newPassword').isStrongPassword(
         {

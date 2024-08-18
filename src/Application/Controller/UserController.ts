@@ -4,6 +4,11 @@ import UpdateUserDTO from '../DTO/UpdateUserDTO';
 import GetUserResponse from '../Response/GetUserResponse';
 import UserMapper from '../Mappers/UserMapper';
 
+interface User
+{
+    id: string;
+}
+
 class UserController
 {
     public _userService: IUserService;
@@ -137,7 +142,8 @@ class UserController
     {
         try
         {           
-            const updatePasswordDto = this._userMapper.CreateUpdatePasswordDTO(req, req.body.decoded.id);            
+            const user = req.user as User;
+            const updatePasswordDto = this._userMapper.CreateUpdatePasswordDTO(req, user.id);            
             const updatedUser = await this._userService.updatePassword(updatePasswordDto);
             const userResponse = this._userMapper.CreateCreatedUserResponse(updatedUser);
             res.status(201).json(userResponse);
@@ -151,7 +157,8 @@ class UserController
     {
         try
         {
-            await this._userService.deleteUser(req.body.decoded.id as string);
+            const user = req.user as User;
+            await this._userService.deleteUser(user.id as string);
             res.status(200).json("Usuario eliminado");
         }
         catch (error)
