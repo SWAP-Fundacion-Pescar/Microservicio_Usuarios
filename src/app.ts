@@ -6,13 +6,12 @@ import errorHandler from './Application/Middleware/ErrorHandler';
 import swaggerSpec from './Infrastructure/Config/Swagger';
 import swaggerUi from 'swagger-ui-express';
 import passport from './Infrastructure/Config/Passport';
+import cors from 'cors';
 MongoDB();
 const app = express();
-
-
-
-
+app.use(cors());
 app.use(passport.initialize());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(requestLogger);
 app.use('/api', userRouter);
