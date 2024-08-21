@@ -73,7 +73,6 @@ class UserController
         try
         {
             const {id} = req.params;
-            console.log("Here is the id:", id);
             const retrievedUser = await this._userService.getUserById(id as string);
             const getUserResponse = this._userMapper.CreateGetUserResponse(retrievedUser);
             res.status(200).json(getUserResponse);
