@@ -26,10 +26,10 @@ class UserCommand implements IUserCommand
         const updatedUser = await UserModel.findByIdAndUpdate(userDto.id, 
             {
                 username: userDto.username,
-                email: userDto.email,
-                password: userDto.password,
+                name: userDto.name,
+                lastName: userDto.lastName,
                 city: userDto.city,            
-            });      
+            }, {new: true});      
         if(!updatedUser){ throw new NotFoundException("Usuario no encontrado")};
         return updatedUser;
     }

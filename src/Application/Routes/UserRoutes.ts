@@ -128,6 +128,8 @@ userRouter.post('/users/login', validateLogin, validationErrorHandler, userContr
  * 
  */
 userRouter.get('/users/:id', userController.getUserById);
+
+userRouter.put('/users/info', authenticateJwt, userController.updateUser)
 /**
  * @swagger
  * /api/users/password:

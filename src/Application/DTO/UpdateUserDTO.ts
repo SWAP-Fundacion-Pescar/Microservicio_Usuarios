@@ -2,15 +2,15 @@ class UpdateUserDTO
 {
     id: string
     username: string;
-    email: string;
-    password: string;
+    name: string;
+    lastName: string;
     city: string;
-    constructor(id: string, username: string, email: string, password: string, city: string)
+    constructor(id: string, username: string, name: string, lastName: string, city: string)
     {
         this.id = id;
         this.username = username;
-        this.email = email;
-        this.password = password;
+        this.name = name;
+        this.lastName = lastName;
         this.city = city;
     };
 }

@@ -128,8 +128,9 @@ class UserController
     {
         try
         {
-            const {id, username, email, password, city} = req.body;
-            const updateUserDto = new UpdateUserDTO(id, username, email, password, city);
+            const user = req.user as User;
+            const {username, name, lastName, city} = req.body;
+            const updateUserDto = new UpdateUserDTO(user.id, username, name, lastName, city);
             const updatedUser = await this._userService.updateUser(updateUserDto);
             res.status(200).json(updatedUser);
         }
