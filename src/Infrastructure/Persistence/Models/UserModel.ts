@@ -15,6 +15,7 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema
         puntuation: {type: Number, required: true, default: 0},
         isVerified: {type: Boolean, default: false},
         verificationToken: {type: String},
+        profilePictureUrl: {type: String},
         createdAt: {type: Date, default : Date.now}
     }
 );

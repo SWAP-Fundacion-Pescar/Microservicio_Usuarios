@@ -12,6 +12,7 @@ interface IUserDocument extends Document {
     puntuation: number;
     isVerified: boolean;
     verificationToken: string;
+    profilePictureUrl: string;
     createdAt: Date;
     comparePassword: (password: string) => Promise<boolean>;
 }

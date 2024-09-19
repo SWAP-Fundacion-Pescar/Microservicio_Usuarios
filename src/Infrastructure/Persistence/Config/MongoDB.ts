@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
 
+const URI = process.env.MONGODB_URI;
+if(!URI)
+    {
+        throw new Error("Please add the URI")
+    };
 const MongoDB = async (): Promise<void> => 
     {
         try
         {
-            await mongoose.connect("mongodb://localhost:27017/MicroservicioUsuarios");
+            await mongoose.connect(URI, {                
+                serverSelectionTimeoutMS: 5000 // Adjust the timeout as needed
+            });
             console.log("Se ha conectado la base de datos");
         }
         catch (error: any)

@@ -10,6 +10,8 @@ import ValidationException from "../Exceptions/ValidationException";
 import IUser from "../Interfaces/User/IUser";
 import IUserService from "../Interfaces/User/IUserService";
 import jwt from 'jsonwebtoken';
+import LoginResponse from "../Response/LoginResponse";
+import AddProfilePictureDTO from "../DTO/AddProfilePictureDTO";
 
 const JWT_SECRET = 'your_very_secure_and_long_random_string';
 
@@ -37,18 +39,20 @@ class UserService implements IUserService
         const userEmail = userDto.email
         const verificationToken = jwt.sign({userEmail}, JWT_SECRET, { expiresIn: '1d' });
         userDto.verificationToken = verificationToken;
+        userDto.profilePictureUrl = 'https://res.cloudinary.com/dojyoiv2g/image/upload/v1726535174/pfp/agjserzhopqxk1xxka0c.webp';
         const createdUser = await userCommand.registerUser(userDto);
         sendVerificationEmail(createdUser.email, createdUser.verificationToken)
         return createdUser;
     }
-    async login(loginDto: LoginDTO): Promise<string>
+    async login(loginDto: LoginDTO): Promise<LoginResponse>
     {
         const retrievedUser = await userQuery.getUserByEmail(loginDto.email);
         const isMatch = await retrievedUser.comparePassword(loginDto.password);
         if(!isMatch){throw new ValidationException("Credenciales invalidas")};
         const payload = { id: retrievedUser.id};
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h'});
-        return token;
+        const loginResponse = new LoginResponse(token, retrievedUser.id)
+        return loginResponse;
     }
     async verifyEmail(token: string): Promise<void> 
     {
@@ -72,6 +76,11 @@ class UserService implements IUserService
                 throw new Error('Invalid token');
             }            
         })
+    }
+    async addProfilePicture(addProfilePictureDTO: AddProfilePictureDTO): Promise<string>
+    {
+        const retrievedUrl = await userCommand.addProfilePicture(addProfilePictureDTO);
+        return retrievedUrl;
     }
     async updateUser(userDto: UpdateUserDTO): Promise<IUser> {
         const updatedUser = await userCommand.updateUser(userDto);

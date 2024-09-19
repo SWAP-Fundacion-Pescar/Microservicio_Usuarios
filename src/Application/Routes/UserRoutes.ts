@@ -5,6 +5,7 @@ import UserMapper from "../Mappers/UserMapper";
 import { validateCreateUser, validateLogin, validateUpdatePassword } from "../Middleware/Validator/UserValidator";
 import validationErrorHandler from "../Middleware/Validator/ValidationErrorHandler";
 import { authenticateJwt } from "../Middleware/passportMiddleware";
+import upload from "../../Infrastructure/Config/multerStorage";
 
 
 
@@ -65,7 +66,7 @@ userRouter.post('/users/register', validateCreateUser, validationErrorHandler, u
  */
 
 userRouter.get('/users/verify-email/:token', userController.verifyEmail);
-
+userRouter.put('/users/pfp', authenticateJwt, upload.single('pfp'), userController.addProfilePicture);
 /**
  * @swagger
  * /api/users/login:
