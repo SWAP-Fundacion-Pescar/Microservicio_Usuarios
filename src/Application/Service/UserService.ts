@@ -10,6 +10,7 @@ import ValidationException from "../Exceptions/ValidationException";
 import IUser from "../Interfaces/User/IUser";
 import IUserService from "../Interfaces/User/IUserService";
 import jwt from 'jsonwebtoken';
+import LoginResponse from "../Response/LoginResponse";
 
 const JWT_SECRET = 'your_very_secure_and_long_random_string';
 
@@ -41,14 +42,15 @@ class UserService implements IUserService
         sendVerificationEmail(createdUser.email, createdUser.verificationToken)
         return createdUser;
     }
-    async login(loginDto: LoginDTO): Promise<string>
+    async login(loginDto: LoginDTO): Promise<LoginResponse>
     {
         const retrievedUser = await userQuery.getUserByEmail(loginDto.email);
         const isMatch = await retrievedUser.comparePassword(loginDto.password);
         if(!isMatch){throw new ValidationException("Credenciales invalidas")};
         const payload = { id: retrievedUser.id};
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h'});
-        return token;
+        const loginResponse = new LoginResponse(token, retrievedUser.id)
+        return loginResponse;
     }
     async verifyEmail(token: string): Promise<void> 
     {

@@ -47,8 +47,8 @@ class UserController
         try
         {
             const loginDto = this._userMapper.CreateLoginDTO(req);
-            const token = await this._userService.login(loginDto);
-            res.status(200).json(token);
+            const response = await this._userService.login(loginDto);
+            res.status(200).json(response);
         }   
         catch (error)
         {

@@ -2,6 +2,7 @@ import CreateUserDTO from "../../DTO/CreateUserDTO";
 import LoginDTO from "../../DTO/LoginDTO";
 import UpdatePasswordDTO from "../../DTO/UpdatePasswordDTO";
 import UpdateUserDTO from "../../DTO/UpdateUserDTO";
+import LoginResponse from "../../Response/LoginResponse";
 import IUser from "./IUser";
 interface IUserService
 {
@@ -11,7 +12,7 @@ interface IUserService
     getUsersByPuntuation(puntuation: number): Promise<IUser[]>;
     
     registerUser(userDto: CreateUserDTO): Promise<IUser>;
-    login(loginDto: LoginDTO): Promise<string>;
+    login(loginDto: LoginDTO): Promise<LoginResponse>;
     verifyEmail(token: string): Promise<void>;
     updateUser(userDto: UpdateUserDTO): Promise<IUser>;
     updatePassword(userDto: UpdatePasswordDTO): Promise<IUser>;
