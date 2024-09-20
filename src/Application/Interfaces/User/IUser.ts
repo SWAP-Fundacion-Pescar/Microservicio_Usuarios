@@ -11,6 +11,7 @@ interface IUser
     puntuation: number,
     isVerified: boolean,
     verificationToken: string,
+    profilePictureUrl: string,
     createdAt: Date,
 }
 

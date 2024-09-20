@@ -1,3 +1,4 @@
+import AddProfilePictureDTO from "../../DTO/AddProfilePictureDTO";
 import CreateUserDTO from "../../DTO/CreateUserDTO";
 import LoginDTO from "../../DTO/LoginDTO";
 import UpdatePasswordDTO from "../../DTO/UpdatePasswordDTO";
@@ -13,6 +14,7 @@ interface IUserService
     
     registerUser(userDto: CreateUserDTO): Promise<IUser>;
     login(loginDto: LoginDTO): Promise<LoginResponse>;
+    addProfilePicture(addProfilePictureDTO: AddProfilePictureDTO): Promise<string>;
     verifyEmail(token: string): Promise<void>;
     updateUser(userDto: UpdateUserDTO): Promise<IUser>;
     updatePassword(userDto: UpdatePasswordDTO): Promise<IUser>;

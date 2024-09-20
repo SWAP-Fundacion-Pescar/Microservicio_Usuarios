@@ -3,12 +3,18 @@ import IUserService from "../Interfaces/User/IUserService";
 import UpdateUserDTO from '../DTO/UpdateUserDTO';
 import GetUserResponse from '../Response/GetUserResponse';
 import UserMapper from '../Mappers/UserMapper';
-
+import { v2 as cloudinary } from 'cloudinary';
+import streamifier from 'streamifier';
+import AddProfilePictureDTO from '../DTO/AddProfilePictureDTO';
 interface User
 {
     id: string;
 }
-
+cloudinary.config({
+    cloud_name: 'dojyoiv2g',
+    api_key: '913584591931997',
+    api_secret: 'RP5zkiAoI5EQX4Mg36_97pgndsI',
+});
 class UserController
 {
     public _userService: IUserService;
@@ -24,6 +30,7 @@ class UserController
         this.getUsersByRole = this.getUsersByRole.bind(this);
         this.getUsersByCity = this.getUsersByCity.bind(this);
         this.getUsersByPuntuation = this.getUsersByPuntuation.bind(this);
+        this.addProfilePicture = this.addProfilePicture.bind(this);
         this.updateUser = this.updateUser.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
@@ -122,6 +129,34 @@ class UserController
         catch (error)
         {
             next(error);
+        }
+    }
+    public async addProfilePicture(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const user = req.user as User;
+            const result = await new Promise((resolve, reject) => {
+                if (!req.file) throw new Error("File not found")
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    { folder: 'pfp' },  // Cloudinary folder
+                    (error, result) => {
+                        if (error) return reject(error);
+                        resolve(result);
+                    }
+                );
+
+                // Stream the file's buffer to Cloudinary
+                streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+            });
+
+            // Respond with the secure URL of the uploaded file
+            const url = (result as any).secure_url;
+            const addProfilePictureDTO = new AddProfilePictureDTO(user.id, url);
+            const response = await this._userService.addProfilePicture(addProfilePictureDTO);
+            res.status(201).send(response);
+        }
+        catch (error) {
+            next(error);
+
         }
     }
     public async updateUser( req: Request, res: Response, next: NextFunction): Promise<void>

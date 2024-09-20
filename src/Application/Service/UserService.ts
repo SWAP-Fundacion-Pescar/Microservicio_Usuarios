@@ -11,6 +11,7 @@ import IUser from "../Interfaces/User/IUser";
 import IUserService from "../Interfaces/User/IUserService";
 import jwt from 'jsonwebtoken';
 import LoginResponse from "../Response/LoginResponse";
+import AddProfilePictureDTO from "../DTO/AddProfilePictureDTO";
 
 const JWT_SECRET = 'your_very_secure_and_long_random_string';
 
@@ -74,6 +75,11 @@ class UserService implements IUserService
                 throw new Error('Invalid token');
             }            
         })
+    }
+    async addProfilePicture(addProfilePictureDTO: AddProfilePictureDTO): Promise<string>
+    {
+        const retrievedUrl = await userCommand.addProfilePicture(addProfilePictureDTO);
+        return retrievedUrl;
     }
     async updateUser(userDto: UpdateUserDTO): Promise<IUser> {
         const updatedUser = await userCommand.updateUser(userDto);

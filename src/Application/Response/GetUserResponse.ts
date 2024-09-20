@@ -9,6 +9,7 @@ class GetUserResponse {
     city: string;
     role: string;
     puntuation: number;
+    profilePictureUrl: string;
     constructor(user: IUser){
         this.id = user._id;
         this.username = user.username;
@@ -18,6 +19,7 @@ class GetUserResponse {
         this.city = user.city;
         this.role = user.role;
         this.puntuation = user.puntuation
+        this.profilePictureUrl = user.profilePictureUrl;
     }
 }
 export default GetUserResponse;

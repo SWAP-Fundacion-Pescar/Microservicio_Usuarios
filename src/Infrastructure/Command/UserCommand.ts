@@ -1,3 +1,4 @@
+import AddProfilePictureDTO from "../../Application/DTO/AddProfilePictureDTO";
 import CreateUserDTO from "../../Application/DTO/CreateUserDTO";
 import UpdatePasswordDTO from "../../Application/DTO/UpdatePasswordDTO";
 import UpdateUserDTO from "../../Application/DTO/UpdateUserDTO";
@@ -20,6 +21,13 @@ class UserCommand implements IUserCommand
         const verifiedUser = await UserModel.findOneAndUpdate({email: email, verificationToken: token}, {isVerified: true, verificationToken: null}, { new: true});
         if(!verifiedUser){ throw new NotFoundException('Usuario no encontrado') };
         await verifiedUser.save();
+    }
+    async addProfilePicture(addProfilePictureDTO: AddProfilePictureDTO): Promise<string> {
+        const retrievedUser = await UserModel.findById(addProfilePictureDTO.userId);
+        if(!retrievedUser) throw new NotFoundException('Usuario no encontrado');
+        retrievedUser.profilePictureUrl = addProfilePictureDTO.url;
+        await retrievedUser.save();
+        return retrievedUser.profilePictureUrl
     }
     async updateUser(userDto: UpdateUserDTO): Promise<IUser> 
     {
