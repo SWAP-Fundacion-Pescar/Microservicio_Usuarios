@@ -7,6 +7,8 @@ import swaggerSpec from './Infrastructure/Config/Swagger';
 import swaggerUi from 'swagger-ui-express';
 import passport from './Infrastructure/Config/Passport';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 MongoDB();
 const app = express();
 app.use(cors());
