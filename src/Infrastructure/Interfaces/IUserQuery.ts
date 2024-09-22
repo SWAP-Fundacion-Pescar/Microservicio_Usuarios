@@ -1,4 +1,4 @@
-import IUserDocument from "../../../Infrastructure/Interfaces/IUserDocument";
+import IUserDocument from "./IUserDocument";
 
 interface IUserQuery
 {
