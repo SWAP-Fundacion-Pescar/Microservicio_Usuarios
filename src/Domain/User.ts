@@ -13,9 +13,10 @@ class User implements IUser
     puntuation: number;
     isVerified: boolean;
     verificationToken: string;
+    profilePictureUrl: string;
     createdAt: Date;
     constructor(id: string, username: string, name: string, lastName: string, email: string, password: string, city: string, role: string, puntuation: number,
-        isVerified: boolean, verificationToken: string, createdAt: Date)
+        isVerified: boolean, verificationToken: string, profilePictureUrl: string, createdAt: Date)
     {
         this._id = id;
         this.username = username;
@@ -28,6 +29,7 @@ class User implements IUser
         this.puntuation = puntuation;
         this.isVerified = isVerified;
         this.verificationToken = verificationToken;
+        this.profilePictureUrl = profilePictureUrl;
         this.createdAt = createdAt;
     }
     
