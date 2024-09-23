@@ -11,6 +11,8 @@ interface IUserService
     getUsersByRole(role: string): Promise<IUser[]>;
     getUsersByCity(city: string): Promise<IUser[]>;
     getUsersByPuntuation(puntuation: number): Promise<IUser[]>;
+    getUserFavorites(userId: string): Promise<Array<string>>;
+
     
     registerUser(userDto: CreateUserDTO): Promise<IUser>;
     login(loginDto: LoginDTO): Promise<LoginResponse>;
@@ -19,5 +21,7 @@ interface IUserService
     updateUser(userDto: UpdateUserDTO): Promise<IUser>;
     updatePassword(userDto: UpdatePasswordDTO): Promise<IUser>;
     deleteUser(id: string): Promise<void>;
+    addFavorite(userId: string , clotheId: string): Promise<string>;
+    deleteFavorite(userId: string, clotheId: string): Promise<string>;
 };
 export default IUserService;

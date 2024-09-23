@@ -5,6 +5,11 @@ import UserModel from "../Persistence/Models/UserModel";
 
 class UserQuery implements IUserQuery
 {
+    async getUserFavorites(userId: string): Promise<Array<string>> {
+        const retrievedUser = await UserModel.findById(userId);
+        if(!retrievedUser) throw new NotFoundException('Usuario no encontrado');
+        return retrievedUser.favorites;
+    }
     async getUserById(id: string): Promise<IUserDocument> {
         const retrievedUser = await UserModel.findOne({_id: id});
         if(!retrievedUser){throw new NotFoundException("Usuario no encontrado")};

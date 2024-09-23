@@ -16,6 +16,7 @@ const userSchema: Schema<IUserDocument> = new mongoose.Schema
         isVerified: {type: Boolean, default: false},
         verificationToken: {type: String},
         profilePictureUrl: {type: String},
+        favorites: {type: [String], default: []},
         createdAt: {type: Date, default : Date.now}
     }
 );

@@ -33,6 +33,43 @@ class UserController {
         this.updateUser = this.updateUser.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+        this.getUserFavorites = this.getUserFavorites.bind(this);
+        this.addFavorite = this.addFavorite.bind(this);
+        this.deleteFavorite = this.deleteFavorite.bind(this);
+    }
+    public async getUserFavorites(req: Request, res: Response, next: NextFunction): Promise<void>
+    {
+        try {
+            const { userId } = req.body;
+            const response = await this._userService.getUserFavorites(userId);
+            res.status(200).json(response);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
+    public async addFavorite(req: Request, res: Response, next: NextFunction): Promise<void>
+    {
+        try {
+            const { userId, clotheId } = req.body;
+            const response = await this._userService.addFavorite(userId, clotheId);
+            res.status(201).json(response);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    public async deleteFavorite(req: Request, res: Response, next: NextFunction): Promise<void>
+    {
+        try {
+            const { userId, clotheId } = req.body;
+            const response = await this._userService.deleteFavorite(userId, clotheId);
+            res.status(200).json(response);
+        }
+        catch (error) {
+            next(error);
+        }
     }
     public async registerUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {

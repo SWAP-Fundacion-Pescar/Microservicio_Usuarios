@@ -19,6 +19,18 @@ const userCommand = new UserCommand();
 const userQuery = new UserQuery();
 class UserService implements IUserService
 {
+    async getUserFavorites(userId: string): Promise<Array<string>> {
+        const favorites = await userQuery.getUserFavorites(userId);
+        return favorites;
+    }
+    async addFavorite(userId: string, clotheId: string): Promise<string> {
+        const favorite = await userCommand.addFavorite(userId, clotheId);
+        return favorite;
+    }
+    async deleteFavorite(userId: string, clotheId: string): Promise<string> {
+        const favorite = await userCommand.deleteFavorite(userId, clotheId);
+        return favorite;
+    }
     async getUserById(id: string): Promise<IUser> {
         const retrievedUser = await userQuery.getUserById(id);
         return retrievedUser;

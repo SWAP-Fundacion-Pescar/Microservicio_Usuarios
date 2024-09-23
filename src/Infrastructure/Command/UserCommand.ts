@@ -10,6 +10,20 @@ import UserModel from "../Persistence/Models/UserModel";
 import bcrypt from 'bcrypt';
 class UserCommand implements IUserCommand
 {
+    async addFavorite(userId: string, clotheId: string): Promise<string> {
+        const retrievedUser = await UserModel.findById(userId);
+        if(!retrievedUser) throw new NotFoundException('Usuario no encontrado');
+        retrievedUser.favorites.push(clotheId);
+        await retrievedUser.save();
+        return clotheId;
+    }
+    async deleteFavorite(userId: string, clotheId: string): Promise<string> {
+        const retrievedUser = await UserModel.updateOne(
+            { _id: userId }, 
+            { $pull: { favorites: clotheId } } 
+        );
+        return clotheId;
+    }
     
     async registerUser(userDto: CreateUserDTO): Promise<IUser> 
     {

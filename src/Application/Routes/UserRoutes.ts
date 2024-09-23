@@ -19,6 +19,9 @@ const userController = new UserController(userService, userMapper);
  *  name: Users
  *  description: User management
  */
+userRouter.post('/users/favorite', authenticateJwt, userController.addFavorite);
+userRouter.get('/users/favorite', authenticateJwt, userController.getUserFavorites);
+userRouter.delete('/users/favorite', authenticateJwt, userController.deleteFavorite);
 
 /**
  * @swagger

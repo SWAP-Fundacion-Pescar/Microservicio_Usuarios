@@ -8,5 +8,6 @@ interface IUserQuery
     getUsersByRole(role: string): Promise<IUserDocument[]>;
     getUsersByCity(city: string): Promise<IUserDocument[]>;
     getUsersByPuntuation(puntuation: number): Promise<IUserDocument[]>;
+    getUserFavorites(userId: string): Promise<Array<string>>;
 };
 export default IUserQuery;

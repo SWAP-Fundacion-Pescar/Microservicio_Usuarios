@@ -12,6 +12,8 @@ interface IUserCommand
     updateUser(userDto: UpdateUserDTO): Promise<IUser>;
     updatePassword(userDto: UpdatePasswordDTO): Promise<IUser>;
     deleteUser(id: string): Promise<void>;
+    addFavorite(userId: string , clotheId: string): Promise<string>;
+    deleteFavorite(userId: string, clotheId: string): Promise<string>;
 }
 
 export default IUserCommand;

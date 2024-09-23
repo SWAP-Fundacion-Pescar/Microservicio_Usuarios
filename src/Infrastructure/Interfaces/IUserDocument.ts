@@ -13,6 +13,7 @@ interface IUserDocument extends Document {
     isVerified: boolean;
     verificationToken: string;
     profilePictureUrl: string;
+    favorites: string[];
     createdAt: Date;
     comparePassword: (password: string) => Promise<boolean>;
 }
